@@ -1,0 +1,28 @@
+{
+  "name": "santran/ldap-auth",
+  "description": "LDAP Authentication for Laravel 5.2 and above",
+  "keywords": [
+    "laravel 5.2", "laravel 5.3", "laravel 5.4", "laravel", "laravel auth", "laravel authentication",
+    "ldap", "ldap authentication", "active directory"
+  ],
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Tran Doan San",
+      "email": "santran686@mail.com",
+      "homepage": "https://github.com/mrsantran"
+    }
+  ],
+  "require": {
+    "laravel/framework": "~5.2",
+    "php": ">=5.5.9"
+  },
+  "require-dev": {
+    "phpunit/phpunit" : "4.*"
+  },
+  "autoload": {
+    "psr-4": {
+      "SanTran\\LDAPAuth\\": "src/"
+    }
+  }
+}
