@@ -13,6 +13,7 @@
       "homepage": "https://github.com/mrsantran"
     }
   ],
+  "minimum-stability": "dev",
   "require": {
     "laravel/framework": "~5.2",
     "php": ">=5.5.9"
