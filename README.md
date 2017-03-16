@@ -141,7 +141,7 @@ return [
 ```
 
 
-Update your `config/auth.php` to use **ldap** as authentication and the **User** Class.
+Update your `config/auth.php` to use **ldap** as authentication and the **LDAPUser** Class.
 
 ```php
 'guards' => [
@@ -159,7 +159,7 @@ Update your `config/auth.php` to use **ldap** as authentication and the **User**
 
 	'ldap' => [
 		'driver' => 'ldap',
-		'model'  => \SanTran\LDAPAuth\User::class,
+		'model'  => \SanTran\LDAPAuth\LDAPUser::class,
 	],
 ]
 ```

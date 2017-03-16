@@ -16,7 +16,7 @@ class LDAPAuthUserProvider implements UserProvider
     protected $ldap;
 
     /**
-     * LDAP Auth User Class.
+     * LDAP User Class.
      *
      * @var string
      */
@@ -73,7 +73,7 @@ class LDAPAuthUserProvider implements UserProvider
      * Retrieve a user by the given credentials.
      *
      * @param  array $credentials
-     * @return \SanTran\LDAPAuth\User|null
+     * @return \SanTran\LDAPAuth\LDAPUser|null
      */
     public function retrieveByCredentials(array $credentials)
     {

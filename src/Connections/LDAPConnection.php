@@ -55,7 +55,7 @@ class LDAPConnection implements ConnectionInterface
 
 
     /**
-     * LdapConnection constructor.
+     * LDAPConnection constructor.
      *
      * @param array $config
      */
