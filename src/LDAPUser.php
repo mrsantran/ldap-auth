@@ -38,8 +38,7 @@ class LDAPUser implements UserContract, AuthorizableContract, LDAPUserContract
      */
     public function getAuthIdentifierName()
     {
-        $identifier_name = config('ldap_auth.search_filter');
-        return $identifier_name;
+        return config('ldap_auth.search_filter');
     }
 
     /**
@@ -138,28 +137,46 @@ class LDAPUser implements UserContract, AuthorizableContract, LDAPUserContract
      */
     private function buildAttributesFromLdap($entry)
     {
-        if ($entry) {
-            $key = config('ldap_auth.search_filter');
-            $search_filter = isset($entry[$key][1]) ? $entry[$key] : $entry[$key][0];
-            //get User info
-            if (config('ldap_auth.read_user_record')) {
-                $mapping_field = config('ldap_auth.mapping_field');
-                $model = config("auth.providers.users.model");
-                $user_info = $model::where($mapping_field, $search_filter)->first();
-                if ($user_info) {
-                    $this->attributes = $user_info;
+        try {
+            if ($entry) {
+                $key = config('ldap_auth.search_filter');
+                $search_filter = isset($entry[$key][1]) ? $entry[$key] : $entry[$key][0];
+                //get User info
+                if (config('ldap_auth.read_user_record')) {
+                    $mapping_field = config('ldap_auth.mapping_field');
+                    $model = config("auth.providers.users.model");
+                    $user_info = $model::where($mapping_field, $search_filter)->first();
+                    if ($user_info) {
+                        $this->attributes = $user_info;
+                    }
+                }
+
+                $this->attributes['dn'] = $entry['dn'];
+                // Set the attributes accordingly to the search fields given
+                foreach ($entry as $index => $key) {
+                    if (array_key_exists($index, config('ldap_auth.search_fields'))) {
+                        $this->attributes[$key] = isset($entry[$key][1]) ? $entry[$key] : $entry[$key][0];
+                    }
                 }
             }
-
-            $this->attributes['dn'] = $entry['dn'];
-
-            // Set the attributes accordingly to the search fields given
-            foreach ($entry as $index => $key) {
-                if (array_key_exists($index, config('ldap_auth.search_fields'))) {
-                    $this->attributes[$key] = isset($entry[$key][1]) ? $entry[$key] : $entry[$key][0];
-                }
+        } catch (\Exception $ex) { }
+    }
+    
+    /**
+     * Check if the LDAPUser is a member of requested group
+     *
+     * @param string $group
+     *
+     * @return bool
+     */
+    public function isMemberOf($group)
+    {
+        foreach ($this->attributes['member_of'] as $groups) {
+            if (preg_match('/^CN=' . $group . '/', $groups)) {
+                return true;
             }
         }
+        return false;
     }
 
 }

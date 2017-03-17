@@ -30,7 +30,18 @@ return [
     | It's highly recommended to include it to limit queries executed per request.
     |
     */
-    'base_dn' => 'OU=users,DC=aitldap,DC=com',
+    'base_dn' => 'DC=aitldap,DC=com',
+
+    /*
+    |--------------------------------------------------
+    | Group Distinguished Name
+    |--------------------------------------------------
+    |
+    | Permission login to this tool
+    |
+    */
+    
+    'group_dn' => 'CN=tms,OU=tools,DC=aitldap,DC=com',
 
     /*
     |--------------------------------------------------

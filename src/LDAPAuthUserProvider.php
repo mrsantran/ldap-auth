@@ -8,6 +8,7 @@ use SanTran\LDAPAuth\LDAP;
 
 class LDAPAuthUserProvider implements UserProvider
 {
+
     /**
      * LDAP Wrapper.
      *
@@ -41,7 +42,7 @@ class LDAPAuthUserProvider implements UserProvider
     public function retrieveById($identifier)
     {
         return $this->retrieveByCredentials(
-            ['username' => $identifier]
+                        ['username' => $identifier]
         );
     }
 
@@ -79,14 +80,17 @@ class LDAPAuthUserProvider implements UserProvider
     {
         $username = $credentials['username'];
         $result = $this->ldap->find($username);
-
-        if( !is_null($result) ){
+        if (!is_null($result)) {
             $user = new $this->model;
-            $user->build( $result );
-
-            return $user;
+            $groups = $this->ldap->findGroups();
+            if ($groups) {
+                if ($groups["memberuid"][0] != $result["uid"][0]) {
+                    return null;
+                }
+                $user->build($result);
+                return $user;
+            }
         }
-
         return null;
     }
 
@@ -100,8 +104,7 @@ class LDAPAuthUserProvider implements UserProvider
     public function validateCredentials(Authenticatable $user, array $credentials)
     {
         return $this->ldap->auth(
-            $user->dn,
-            $credentials['password']
+                        $user->dn, $credentials['password']
         );
     }
 

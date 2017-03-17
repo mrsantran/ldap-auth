@@ -31,6 +31,13 @@ class LDAP
     protected $base_dn;
 
     /**
+     * The group distinguished name.
+     *
+     * @var string
+     */
+    protected $group_dn;
+
+    /**
      * The filter to execute a search query on.
      *
      * @var string
@@ -42,7 +49,7 @@ class LDAP
      *
      * @var array
      */
-    protected $search_fields = [ ];
+    protected $search_fields = [];
 
     /**
      * User with permissions for preventing anonymous bindings.
@@ -57,7 +64,6 @@ class LDAP
      * @var string
      */
     private $admin_pass;
-
 
     /**
      * Tries to connect and bind to the LDAP
@@ -76,7 +82,6 @@ class LDAP
         $this->ldap = new LDAPConnection($config);
         $this->connect($this->ldap);
     }
-
 
     /**
      * Initializes the connecting parameters.
@@ -101,7 +106,6 @@ class LDAP
         $this->ldap->bind($this->admin_user, $this->admin_pass);
     }
 
-
     /**
      * Execute a search query in the LDAP Base DN.
      *
@@ -110,21 +114,19 @@ class LDAP
      *
      * @return array $entry
      */
-    public function find($identifier, array $fields = [ ])
+    public function find($identifier, array $fields = [])
     {
         $entry = [];
         // Get all result entries
         $results = $this->ldap->search(
-            $this->base_dn,
-            $this->search_filter . '=' . $identifier,
-            ( $fields ?: $this->search_fields )
+                $this->base_dn, $this->search_filter . '=' . $identifier, ( $fields ?: $this->search_fields)
         );
 
         if (count($results) > 0) {
             $entry = $this->ldap->entry($results);
 
             // Returning a single LDAP entry
-            if (isset( $entry[0] ) && ! empty( $entry[0] )) {
+            if (isset($entry[0]) && !empty($entry[0])) {
                 return $entry[0];
             }
         }
@@ -132,6 +134,29 @@ class LDAP
         return $entry;
     }
 
+    /**
+     * Execute a search groups query in the LDAP Base DN.
+     *
+     * @return array $entry
+     */
+    public function findGroups()
+    {
+        $entry = [];
+        try {
+            // Get all result entries
+            $results = $this->ldap->search(
+                    $this->group_dn, 'memberuid=*', ["memberuid", "gidnumber"]
+            );
+            if (count($results) > 0) {
+                $entry = $this->ldap->entry($results);
+                // Returning a single LDAP entry
+                if (isset($entry[0]) && !empty($entry[0])) {
+                    return $entry[0];
+                }
+            }
+        } catch (\Exception $ex) { }
+        return $entry;
+    }
 
     /**
      * Rebinds with a given DN and Password
@@ -148,7 +173,6 @@ class LDAP
         return $this->ldap->bind($username, $password);
     }
 
-
     /**
      * Bind configuration file to class properties
      * as long as these already exist
@@ -163,7 +187,7 @@ class LDAP
             if (property_exists($this, $key)) {
                 $this->{$key} = $value;
                 // Remove config key
-                unset( $config[$key] );
+                unset($config[$key]);
             }
         }
 
