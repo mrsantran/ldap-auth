@@ -87,7 +87,7 @@ class LDAPAuthUserProvider implements UserProvider
                 $total = $groups["memberuid"];
                 unset($total["count"]);
                 $exist = array_search($result["uid"][0], $total);
-                if ($exist != NULL) {
+                if (is_null($exist)) {
                     return null;
                 }
                 $user->build($result);
