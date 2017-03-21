@@ -84,6 +84,9 @@ class LDAPAuthUserProvider implements UserProvider
             $user = new $this->model;
             $groups = $this->ldap->findGroups();
             if ($groups) {
+                if (!isset($groups["memberuid"]) || count($groups["memberuid"]) <= 0) {
+                    return null;
+                }
                 $total = $groups["memberuid"];
                 unset($total["count"]);
                 $exist = array_search($result["uid"][0], $total);
