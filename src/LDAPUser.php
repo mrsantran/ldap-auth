@@ -161,22 +161,5 @@ class LDAPUser implements UserContract, AuthorizableContract, LDAPUserContract
             }
         } catch (\Exception $ex) { }
     }
-    
-    /**
-     * Check if the LDAPUser is a member of requested group
-     *
-     * @param string $group
-     *
-     * @return bool
-     */
-    public function isMemberOf($group)
-    {
-        foreach ($this->attributes['member_of'] as $groups) {
-            if (preg_match('/^CN=' . $group . '/', $groups)) {
-                return true;
-            }
-        }
-        return false;
-    }
 
 }

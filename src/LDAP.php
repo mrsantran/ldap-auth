@@ -101,7 +101,7 @@ class LDAP
         $this->ldap->option(LDAP_OPT_NETWORK_TIMEOUT, $connection::TIMELIMIT);
 
         // For debug purposes only.
-        // $this->ldap->option(LDAP_OPT_DEBUG_LEVEL, 7);
+         $this->ldap->option(LDAP_OPT_DEBUG_LEVEL, 7);
 
         $this->ldap->bind($this->admin_user, $this->admin_pass);
     }

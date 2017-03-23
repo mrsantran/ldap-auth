@@ -80,7 +80,7 @@ class LDAPAuthUserProvider implements UserProvider
     {
         $username = $credentials['username'];
         $result = $this->ldap->find($username);
-        if (!is_null($result)) {
+        try {
             $user = new $this->model;
             $groups = $this->ldap->findGroups();
             if ($groups) {
@@ -96,7 +96,7 @@ class LDAPAuthUserProvider implements UserProvider
                 $user->build($result);
                 return $user;
             }
-        }
+        } catch (\Exception $ex) { }
         return null;
     }
 
