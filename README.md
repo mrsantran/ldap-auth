@@ -192,7 +192,9 @@ ldap_auth.php file in your config directory. Adjust the values as you need them.
 or
 ```php
     $user = Auth::guard()->getProvider()->retrieveByCredentials($request->only('username', 'password'));
-    if ($user && Auth::login($user)) {
+    if ($user && Auth::guard()
+                ->getProvider()
+                ->validateCredentials($user, $request->only('password')) && Auth::login($user)) {
         //Passed
     }
 ```
