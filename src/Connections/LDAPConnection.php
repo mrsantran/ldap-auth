@@ -104,6 +104,7 @@ class LDAPConnection implements ConnectionInterface
         }
 
         try {
+            ldap_set_option($this->connection, LDAP_OPT_PROTOCOL_VERSION, 3);
             $this->bound = ldap_bind($this->connection, $username, $password);
         } catch (ErrorException $e) {
             $this->bound = false;
