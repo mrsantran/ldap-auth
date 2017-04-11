@@ -206,9 +206,9 @@ or
                 $model = $auth['providers']['ldap']['model'];
                 $connection = new \SanTran\LDAPAuth\LDAP($ldap);
                 $ldapp_auth = new \SanTran\LDAPAuth\LDAPAuthUserProvider($connection, $model);
-                $user1 = $ldapp_auth->retrieveByCredentials($credentials);
-                if ($ldapp_auth->validateCredentials($user1, $credentials)) {
-                    $user = User::where('username', '=', $request->get('username', ""))->whereNull('deleted_at')->first();
+                $user_ldap = $ldapp_auth->retrieveByCredentials($credentials);
+                if ($ldapp_auth->validateCredentials($user_ldap, $credentials)) {
+                    $user = User::where('username', '=', $credentials['username'])->first();
                     Auth::login($user, true);
 		    //Passed
                 } else {
