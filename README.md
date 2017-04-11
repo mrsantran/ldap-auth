@@ -198,3 +198,20 @@ or
         //Passed
     }
 ```
+or
+```php
+                $ldap = config('ldap_auth');
+                $credentials = $request->only('username', 'password');
+                $auth = config('auth');
+                $model = $auth['providers']['ldap']['model'];
+                $connection = new \SanTran\LDAPAuth\LDAP($ldap);
+                $ldapp_auth = new \SanTran\LDAPAuth\LDAPAuthUserProvider($connection, $model);
+                $user1 = $ldapp_auth->retrieveByCredentials($credentials);
+                if ($ldapp_auth->validateCredentials($user1, $credentials)) {
+                    $user = User::where('username', '=', $request->get('username', ""))->whereNull('deleted_at')->first();
+                    Auth::login($user, true);
+		    //Passed
+                } else {
+                    return redirect()->back()->withInput()->with('error', trans('message.failed'));
+                }
+```
