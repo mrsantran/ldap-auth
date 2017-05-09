@@ -194,5 +194,9 @@ class LDAP
         // Every non-property key is left over and returned
         return $config;
     }
+    
+    public function error() {
+        return $this->ldap->error();
+    }
 
 }
